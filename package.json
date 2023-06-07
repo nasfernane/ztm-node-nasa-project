@@ -1,0 +1,27 @@
+{
+  "name": "ztm-nasa-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "concurrently \"npm install --prefix server\" \"npm install --prefix client\"",
+    "client": "npm start --prefix client",
+    "server": "npm run watch --prefix server",
+    "watch": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/nasfernane/ztm-nasa-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/nasfernane/ztm-nasa-project/issues"
+  },
+  "homepage": "https://gitlab.com/nasfernane/ztm-nasa-project#readme",
+  "dependencies": {
+    "concurrently": "^8.1.0"
+  }
+}
