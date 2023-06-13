@@ -15,11 +15,13 @@ app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.json());
 
-app.get('/', (req, res) => {
+
+app.use('/launches', launchesRouter);
+app.use('/planets', planetsRouter);
+
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
 });
 
-app.use(launchesRouter);
-app.use(planetsRouter);
 
 module.exports = app;

@@ -28,17 +28,17 @@ function loadPlanetsData() {
     })
     .on('end', () => {
       console.log(`${habitablePlanets.length} habitable planets found !`)
-      // console.log(habitablePlanets.map((planet) => {
-      //   return planet['kepler_name'];
-      // }))
-
       resolve();
     })
   })
 }
 
+function getAllPlanets() {
+  return habitablePlanets;
+}
+
 
 module.exports = {
   loadPlanetsData,
-  planets: habitablePlanets
+  getAllPlanets,
 }
