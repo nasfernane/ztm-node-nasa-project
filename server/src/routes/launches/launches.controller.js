@@ -1,6 +1,8 @@
 const { 
   getAllLaunches,
-  addNewLaunch
+  addNewLaunch,
+  abortLaunchById,
+  existsLaunchById,
  } = require('../../models/launches.model');
 
 function httpGetAllLaunches(req, res) {
@@ -33,7 +35,22 @@ function httpAddNewLaunch(req, res) {
   return res.status(201).json(launch);
 }
 
+function httpAbortLaunch(req, res) {
+  const { id } = req.params;
+
+  if (!existsLaunchById(Number(id))) {
+    return res.status(400).json({
+      error: "Wrong flight number"
+    })
+  }
+
+  const aborted = abortLaunchById(Number(id));
+
+  return res.status(200).json(aborted);
+}
+
 module.exports = {
   httpGetAllLaunches,
-  httpAddNewLaunch
+  httpAddNewLaunch,
+  httpAbortLaunch,
 }
