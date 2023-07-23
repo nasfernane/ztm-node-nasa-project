@@ -40,4 +40,6 @@ const launchesSchema = new mongoose.Schema({
   },
 });
 
-module.exports = launchesSchema;
+
+// connecte le schéma avec la collection "Launch"
+module.exports = mongoose.model('Launch', launchesSchema)

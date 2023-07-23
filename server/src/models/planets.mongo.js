@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
 
 const planetsSchema = new mongoose.Schema({
-  name: {
-    keplerName: String,
+  keplerName: {
+    type: String,
     required: true,
   },
 })
 
-module.exports = planetsSchema;
+
+// connecte le schéma à la collection Planet
+module.exports = mongoose.model("Planet", planetsSchema);
