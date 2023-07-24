@@ -40,7 +40,9 @@ function loadPlanetsData() {
 
 async function getAllPlanets() {
   // return habitablePlanets;
-  return await planets.find({})
+  return await planets.find({}, {
+    '_id': 0, '__v': 0 // on exclut les propriétés suivantes
+  })
   // exemples filtre
   // return planets.Find({
   //   keplerName: 'Kepler-62 f'
