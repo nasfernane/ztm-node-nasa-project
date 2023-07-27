@@ -1,6 +1,5 @@
-const launchesDatabase = require('./launches.mongo');
+const launches = require('./launches.mongo');
 const planets = require('./planets.mongo');
-const launches = new Map();
 
 const DEFAULT_FLIGHT_NUMBER = 0;
 
@@ -20,7 +19,7 @@ const launch = {
 saveLaunch(launch);
 
 async function getLatestFlightNumber() {
-  const latestLaunch = await launchesDatabase
+  const latestLaunch = await launches
     .findOne({})
     .sort('-flightNumber');
 
@@ -32,7 +31,7 @@ async function getLatestFlightNumber() {
 }
 
 async function getAllLaunches() {
-  return await launchesDatabase
+  return await launches
     .find({}, { '_id': 0, '__v': 0 });
 }
 
@@ -47,8 +46,8 @@ async function saveLaunch(launch) {
 
   // updateOne ne fait pas que mettre à jour le document dans la base, il mutate également l'objet passé en argument (ici launch)
   // findOneAndUpdate ne renvoie que les propriétés définies dans l'objet à upsert
-  // await launchesDatabase.updateOne({
-  await launchesDatabase.findOneAndUpdate({
+  // await launches.updateOne({
+  await launches.findOneAndUpdate({
     flightNumber: launch.flightNumber,
   }, 
   launch, {
@@ -71,7 +70,7 @@ async function scheduleNewLaunch(launch) {
 
 
 async function abortLaunchById(launchId) {
-  const aborted = await launchesDatabase.updateOne({
+  const aborted = await launches.updateOne({
     flightNumber: launchId,
   }, 
   {
@@ -79,12 +78,12 @@ async function abortLaunchById(launchId) {
     success: false
   });
 
-  return aborted.acknowledged && aborted.modifiedCount === 1;
+  return aborted.modifiedCount === 1;
 }
 
 
 async function existsLaunchById(launchId) {
-  return await launchesDatabase.findOne({
+  return await launches.findOne({
     flightNumber: launchId,
   });
 }
