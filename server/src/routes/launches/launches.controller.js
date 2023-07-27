@@ -1,15 +1,15 @@
 const { 
   getAllLaunches,
-  addNewLaunch,
   abortLaunchById,
   existsLaunchById,
+  scheduleNewLaunch
  } = require('../../models/launches.model');
 
 async function httpGetAllLaunches(req, res) {
   return res.status(200).json(await getAllLaunches());
 }
 
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   const launch = req.body;
 
   if (
@@ -30,23 +30,33 @@ function httpAddNewLaunch(req, res) {
     });
   }
 
-  addNewLaunch(launch);
+  await scheduleNewLaunch(launch);
 
   return res.status(201).json(launch);
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const { id } = req.params;
 
-  if (!existsLaunchById(Number(id))) {
+  const existsLaunch = await existsLaunchById(Number(id));
+
+  if (!existsLaunch) {
     return res.status(400).json({
       error: "Wrong flight number"
     })
   }
 
-  const aborted = abortLaunchById(Number(id));
+  const aborted = await abortLaunchById(Number(id));
 
-  return res.status(200).json(aborted);
+  if (!aborted) {
+    return res.status(400).json({
+      error: "launch not aborted"
+    })
+  } else {
+    return res.status(200).json({
+      ok: true
+    });
+  }
 }
 
 module.exports = {
