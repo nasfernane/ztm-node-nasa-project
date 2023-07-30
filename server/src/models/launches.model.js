@@ -1,22 +1,60 @@
+const axios = require('axios');
+
 const launches = require('./launches.mongo');
 const planets = require('./planets.mongo');
 
 const DEFAULT_FLIGHT_NUMBER = 0;
+const SPACEX_API_URL = 'https://api.spacexdata.com/v4/launches/query'
 
 // let latestFlightNumber = 100;
 
 const launch = {
-  flightNumber: 101,
-  mission: "Kepler 17",
-  rocket: "Explorer IS1",
-  launchDate: new Date("December 27, 2030"),
-  target: "Kepler-442 b",
-  customers: ["NASA", "ZTM"],
-  upcoming: true,
-  success: true,
+  flightNumber: 101, // correspond à flight_number  dans api spacex
+  mission: "Kepler 17", // name
+  rocket: "Explorer IS1", // rocket.name
+  launchDate: new Date("December 27, 2030"), // date_local
+  target: "Kepler-442 b", // pas de correspodnance
+  customers: ["NASA", "ZTM"], // payload.customers pour chaque payload
+  upcoming: true, // upcoming
+  success: true, // success
 }
 
 saveLaunch(launch);
+
+
+async function loadLaunchData() {
+  // const instance = axios.create({
+  //   baseURL: SPACEX_BASE_API + '/launches',
+  //   timeout: 1000,
+  //   header: {'X-Custom-Header': 'foobar'}
+  // });
+
+  // const launches = await instance.get();
+  const response = await axios.post(SPACEX_API_URL, {
+    query: {},
+    options: {
+      populate: [
+        {
+          path: 'rocket',
+          select: {
+            name: 1,
+            height: 1
+          }
+        }, {
+          path: 'payloads',
+          select:  {
+            customers: 1,
+          }
+        }
+      ]
+    } 
+  })
+
+  const launchData = response.data.docs;
+  console.log('launchData[0]')
+  console.log(launchData[0])
+
+}
 
 async function getLatestFlightNumber() {
   const latestLaunch = await launches
@@ -55,6 +93,7 @@ async function saveLaunch(launch) {
   });
 }
 
+
 async function scheduleNewLaunch(launch) {
   const newFlightNumber = await getLatestFlightNumber() + 1;
 
@@ -90,6 +129,7 @@ async function existsLaunchById(launchId) {
 
 module.exports = {
   getAllLaunches,
+  loadLaunchData,
   scheduleNewLaunch,
   abortLaunchById,
   existsLaunchById,
