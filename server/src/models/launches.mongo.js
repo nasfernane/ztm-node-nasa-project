@@ -23,7 +23,6 @@ const launchesSchema = new mongoose.Schema({
   target: {
     // approche A recommandée en NoSQL: stocker directement l'objet imbriqué
     type: String,
-    required: true,
     // approche B plus compliquée: stocker une référence à un objet contenu dans une autre collection
     // type: mongoose.ObjectId,
     // ref: 'Planet'
