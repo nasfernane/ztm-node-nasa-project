@@ -15,7 +15,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/nasfernane/ztm-nasa-project.git"
+    "url": "https://github.com/nasfernane/ztm-node-nasa-project.git"
+    
   },
   "keywords": [],
   "author": "",
