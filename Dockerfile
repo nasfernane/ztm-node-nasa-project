@@ -11,8 +11,6 @@ COPY server/package*.json server/
 RUN npm run install-server --omit=dev
 
 COPY client/ client/
-RUN npm run build --prefix client
-
 COPY server/ server/
 
 USER node
